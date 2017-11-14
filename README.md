@@ -19,7 +19,7 @@ cd phishing_finder
 ```
 
 ## Script `predict_punny_code_dns_names.py`
-
+### Lancement
 Plusieurs paramètres peuvent être utilisés conjointement pour réaliser les opérations souhaitées : 
   * `--help` est le paramètre principal correspondant à la documentation du script : 
 
@@ -55,4 +55,19 @@ predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr --adapter
 
 ```
 predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr --adapter none --output /tmp/fichier_de_resultat
+```
+
+### Exemple de résultat
+```
+(NOM_ENVIRONNEMENT_VIRTUEL) [user@host phishing_finder]$ ./predict_punny_code_dns_names.py --domain labanquepostale.fr --adapter web
++----------------------------------+------------------------------------------+----------------------------------+-----------------+
+| Domaine                          |                       Encodage PunnyCode |                   Encodage UTF-8 |        Réservé? |
++----------------------------------+------------------------------------------+----------------------------------+-----------------+
+| labanquepostale.fr               |                       labanquepostale.fr |               labanquepostale.fr |   83.206.67.137 |
+| labanquepostale.fr               |                xn--labanquepostal-jlb.fr |               labanquepostalë.fr | dispo à l'achat |
+| labanquepostale.fr               |                xn--labanquepostal-8jb.fr |               labanquepostalè.fr | dispo à l'achat |
+| labanquepostale.fr               |                xn--labanquepostal-okb.fr |               labanquepostalé.fr | dispo à l'achat |
+| labanquepostale.fr               |                xn--labanquepostle-hib.fr |               labanquepostäle.fr | dispo à l'achat |
+8<...>8
++----------------------------------+------------------------------------------+----------------------------------+-----------------+
 ```
