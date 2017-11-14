@@ -22,7 +22,6 @@ cd phishing_finder
 ### Lancement
 Plusieurs paramètres peuvent être utilisés conjointement pour réaliser les opérations souhaitées : 
   * `--help` est le paramètre principal correspondant à la documentation du script : 
-
 ```
 usage: predict_punny_code_dns_names.py [-h] --domain [DOMAIN [DOMAIN ...]]
                                        [--adapter ADAPTER] [--output [OUTPUT]]
@@ -37,7 +36,6 @@ optional arguments:
 ```
 
   * `--domain` correspond à la liste des domaines à interroger, séparés par un espace. Exemple d'utilisation : 
-
 ```
 predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr
 ```
@@ -46,13 +44,11 @@ predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr
     * `web` interroge le résultat du site `http://dnslookup.fr`. C'est l'adapteur par défaut.
     * `none` ne retourne aucune information de déclaration DNS.
     * `dns`, à développer, réalisera les requêtes DNS (`UDP:53`).
-
 ```
 predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr --adapter none
 ```
 
   * `--output` permet d'indiquer l'emplacement du fichier contenant les résultats. `/dev/stdout` par défaut.
-
 ```
 predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr --adapter none --output /tmp/fichier_de_resultat
 ```
