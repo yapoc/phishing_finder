@@ -37,7 +37,7 @@ optional arguments:
 
   * `--domain` correspond à la liste des domaines à interroger, séparés par un espace. Exemple d'utilisation : 
 ```
-predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr
+./predict_punny_code_dns_names.py --domain domaine1.tld domaine2.tld
 ```
 
   * `--adapter` correspond à l'adapteur utilisé pour obtenir les informations de déclaration DNS. Trois valeurs sont possibles à ce jour; seules deux sont développées : 
@@ -45,25 +45,23 @@ predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr
     * `none` ne retourne aucune information de déclaration DNS.
     * `dns`, à développer, réalisera les requêtes DNS (`UDP:53`).
 ```
-predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr --adapter none
+./predict_punny_code_dns_names.py --domain domaine1.tld domaine2.tld --adapter none
 ```
 
   * `--output` permet d'indiquer l'emplacement du fichier contenant les résultats. `/dev/stdout` par défaut.
 ```
-predict_punny_code_dns_names.py --domain laposte.fr labanquepostale.fr --adapter none --output /tmp/fichier_de_resultat
+./predict_punny_code_dns_names.py --domain domaine1.tld domaine2.tld --adapter none --output /tmp/fichier_de_resultat
 ```
 
 ### Exemple de résultat
 ```
-(NOM_ENVIRONNEMENT_VIRTUEL) [user@host phishing_finder]$ ./predict_punny_code_dns_names.py --domain labanquepostale.fr --adapter web
+(NOM_ENVIRONNEMENT_VIRTUEL) [user@host phishing_finder]$ ./predict_punny_code_dns_names.py --domain example.com --adapter web
 +----------------------------------+------------------------------------------+----------------------------------+-----------------+
 | Domaine                          |                       Encodage PunnyCode |                   Encodage UTF-8 |        Réservé? |
 +----------------------------------+------------------------------------------+----------------------------------+-----------------+
-| labanquepostale.fr               |                       labanquepostale.fr |               labanquepostale.fr |   83.206.67.137 |
-| labanquepostale.fr               |                xn--labanquepostal-jlb.fr |               labanquepostalë.fr | dispo à l'achat |
-| labanquepostale.fr               |                xn--labanquepostal-8jb.fr |               labanquepostalè.fr | dispo à l'achat |
-| labanquepostale.fr               |                xn--labanquepostal-okb.fr |               labanquepostalé.fr | dispo à l'achat |
-| labanquepostale.fr               |                xn--labanquepostle-hib.fr |               labanquepostäle.fr | dispo à l'achat |
+| example.com                      |                              example.com |                      example.com |   93.184.216.34 |
+| example.com                      |                       xn--exampl-uva.com |                      examplë.com | dispo à l'achat |
+| example.com                      |                       xn--exampl-8ua.com |                      examplè.com | dispo à l'achat |
 8<...>8
 +----------------------------------+------------------------------------------+----------------------------------+-----------------+
 ```
