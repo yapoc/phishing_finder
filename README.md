@@ -23,59 +23,56 @@ cd phishing_finder
 Plusieurs paramètres peuvent être utilisés conjointement pour réaliser les opérations souhaitées : 
   * `--help` est le paramètre principal correspondant à la documentation du script : 
 ```
-usage: predict_punny_code_dns_names.py [-h] -d [DOMAINS [DOMAINS ...]]
-                                       [-a ADAPTER] [-o [OUTPUT]]
+usage: predict_punny_code_dns_names.py [-h] -d DOMAIN [-a ADAPTER] [-o OUTPUT]
 Génération de tout plein de noms de domaines potentiels pour surveiller le
 phishing.
 optional arguments:
   -h, --help            show this help message and exit
-  -d [DOMAINS [DOMAINS ...]], --domains [DOMAINS [DOMAINS ...]]
-                        Adresse du domaine ou des domaines à surveiller
-                        (séparés par des virgules).
+  -d DOMAIN, --domain DOMAIN
+                        Adresse du domaine à surveiller (Option duplicable 1
+                        fois par domaine).
   -a ADAPTER, --adapter ADAPTER
                         Adapteur à utiliser pour réaliser la résolution DNS.
-  -o [OUTPUT], --output [OUTPUT]
+  -o OUTPUT, --output OUTPUT
                         Emplacement du rapport.
 ```
 
-  * `--domains` correspond à la liste des domaines à interroger, séparés par une virgule. Exemple d'utilisation : 
+  * `--domain` ou `-d` correspond au domaine à interroger. Exemple d'utilisation : 
 ```
-./predict_punny_code_dns_names.py --domains domaine1.tld,domaine2.tld
-./predict_punny_code_dns_names.py -d domaine1.tld,domaine2.tld
+./predict_punny_code_dns_names.py --domain example1.com -d example2.com
+./predict_punny_code_dns_names.py -d example1.com -d example2.com
 ```
 
-  * `--adapter` correspond à l'adapteur utilisé pour obtenir les informations de déclaration DNS. Trois valeurs sont possibles à ce jour; seules deux sont développées : 
+  * `--adapter` ou `-a` correspond à l'adapteur utilisé pour obtenir les informations de déclaration DNS. Trois valeurs sont possibles à ce jour; seules deux sont développées : 
     * `web` interroge le résultat du site `http://dnslookup.fr`. C'est l'adapteur par défaut.
     * `none` ne retourne aucune information de déclaration DNS.
     * `dns`, réalise les requêtes DNS par le biais de la lib `dnspython`.
 ```
-./predict_punny_code_dns_names.py --domains domaine1.tld,domaine2.tld --adapter none
-./predict_punny_code_dns_names.py --domains domaine1.tld,domaine2.tld -a none
-./predict_punny_code_dns_names.py -d domaine1.tld,domaine2.tld -a none
-./predict_punny_code_dns_names.py -d domaine1.tld,domaine2.tld --adapter none
+./predict_punny_code_dns_names.py -d example.com -a none
+./predict_punny_code_dns_names.py -d example.com --adapter none
 ```
 
-  * `--output` permet d'indiquer l'emplacement du fichier contenant les résultats. `/dev/stdout` par défaut.
+  * `--output` ou `-o` permet d'indiquer l'emplacement du fichier contenant les résultats. `/dev/stdout` par défaut.
 ```
-./predict_punny_code_dns_names.py --domains domaine1.tld,domaine2.tld --adapter none --output /tmp/fichier_de_resultat
-./predict_punny_code_dns_names.py --domains domaine1.tld,domaine2.tld --adapter none -o /tmp/fichier_de_resultat
-./predict_punny_code_dns_names.py --domains domaine1.tld,domaine2.tld -a none --output /tmp/fichier_de_resultat
-./predict_punny_code_dns_names.py --domains domaine1.tld,domaine2.tld -a none -o /tmp/fichier_de_resultat
-./predict_punny_code_dns_names.py -d domaine1.tld,domaine2.tld --adapter none --output /tmp/fichier_de_resultat
-./predict_punny_code_dns_names.py -d domaine1.tld,domaine2.tld --adapter none -o /tmp/fichier_de_resultat
-./predict_punny_code_dns_names.py -d domaine1.tld,domaine2.tld -a none --output /tmp/fichier_de_resultat
-./predict_punny_code_dns_names.py -d domaine1.tld,domaine2.tld -a none -o /tmp/fichier_de_resultat
+./predict_punny_code_dns_names.py -d example.com -a none --output /tmp/fichier_de_resultat
+./predict_punny_code_dns_names.py -d example.com -a none -o /tmp/fichier_de_resultat
 ```
 
 ### Exemple de résultat
 ```
-(NOM_ENVIRONNEMENT_VIRTUEL) [user@host phishing_finder]$ ./predict_punny_code_dns_names.py --domains example.com --adapter web
+(NOM_ENVIRONNEMENT_VIRTUEL) [user@host phishing_finder]$ ./predict_punny_code_dns_names.py -d example.com -a dns
+
 +----------------------------------+------------------------------------------+----------------------------------+-----------------+
 | Domaine                          |                       Encodage PunnyCode |                   Encodage UTF-8 |        Réservé? |
 +----------------------------------+------------------------------------------+----------------------------------+-----------------+
 | example.com                      |                              example.com |                      example.com |   93.184.216.34 |
 | example.com                      |                       xn--exampl-uva.com |                      examplë.com | dispo à l'achat |
 | example.com                      |                       xn--exampl-8ua.com |                      examplè.com | dispo à l'achat |
-8<...>8
+|                                                           8<...>8                                                                |
+| example.com                      |                      xn--exarnpl-hya.com |                     exarnplé.com | dispo à l'achat |
+| example.com                      |                       xn--exmple-cua.com |                      exämple.com |   85.13.149.201 |
+| example.com                      |                      xn--exmpl-hra6c.com |                      exämplë.com | dispo à l'achat |
+| example.com                      |                      xn--exmpl-hra5a.com |                      exämplè.com | dispo à l'achat |
+|                                                           8<...>8                                                                |
 +----------------------------------+------------------------------------------+----------------------------------+-----------------+
 ```

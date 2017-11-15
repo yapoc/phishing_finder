@@ -29,8 +29,10 @@ class PunnyGenerator (object):
 
   def _safety_checks (self, domain):
     elements = domain.split ('.')
-    if len (elements) != 2:
+    if len (elements) > 2:
       raise ParameterException ("Merci de n'indiquer que le domaine; sans les sous-domaines.")
+    elif len (elements) < 2:
+      raise ParameterException ("On dirait que c'est pas vraiment un domaine que t'as indiqué!")
     return elements[0], elements[1]
 
   def _build_letters_tree (self, word):
@@ -113,13 +115,13 @@ def run (**kwargs):
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description='Génération de tout plein de noms de domaines potentiels pour surveiller le phishing.')
-  parser.add_argument('-d', '--domains', nargs = '*', type = str, required = True, \
-    help = 'Adresse du domaine ou des domaines à surveiller (séparés par des virgules).',\
-    dest = 'domains')
+  parser.add_argument('-d', '--domain', type = str, required = True, \
+    help = 'Adresse du domaine à surveiller (Option duplicable 1 fois par domaine).',\
+    dest = 'domain', action = 'append')
   parser.add_argument('-a', '--adapter', type = str, required = False, \
     help = 'Adapteur à utiliser pour réaliser la résolution DNS.', default = 'WEB', \
     dest = 'adapter')
-  parser.add_argument ('-o', '--output', nargs = '?', type = argparse.FileType ('w'), \
+  parser.add_argument ('-o', '--output', type = argparse.FileType ('w'), \
     default = sys.stdout, help = "Emplacement du rapport.", dest = 'output' )
   args = parser.parse_args ()
 
@@ -127,7 +129,7 @@ if __name__ == "__main__":
   args.output.write ("""| {:<32} | {:>40} | {:>32} | {:>15} |\n""".format (*header ()))
   args.output.write ("""+-{:-<32}-+-{:->40}-+-{:->32}-+-{:->15}-+\n""".format ("", "", "", ""))
 
-  for current_domain in args.domains[0].split (','):
+  for current_domain in args.domain:
     for l in run (domain = current_domain, adapter = args.adapter):
       args.output.write ("""| {:<32} | {:>40} | {:>32} | {:>15} |\n""".format (*l))
     args.output.write ("""+-{:-<32}-+-{:->40}-+-{:->32}-+-{:->15}-+\n""".format ("", "", "", ""))
