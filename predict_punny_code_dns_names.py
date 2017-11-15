@@ -113,16 +113,21 @@ def run (**kwargs):
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description='Génération de tout plein de noms de domaines potentiels pour surveiller le phishing.')
-  parser.add_argument('--domain', nargs = '*', type = str, required = True, help = 'Adresse du domaine à surveiller.')
-  parser.add_argument('--adapter', type = str, required = False, help = 'Adapteur à utiliser pour réaliser la résolution DNS.', default = 'WEB')
-  parser.add_argument ('--output', nargs = '?', type = argparse.FileType ('w'), default = sys.stdout, help = "Emplacement du rapport." )
+  parser.add_argument('-d', '--domains', nargs = '*', type = str, required = True, \
+    help = 'Adresse du domaine ou des domaines à surveiller (séparés par des virgules).',\
+    dest = 'domains')
+  parser.add_argument('-a', '--adapter', type = str, required = False, \
+    help = 'Adapteur à utiliser pour réaliser la résolution DNS.', default = 'WEB', \
+    dest = 'adapter')
+  parser.add_argument ('-o', '--output', nargs = '?', type = argparse.FileType ('w'), \
+    default = sys.stdout, help = "Emplacement du rapport.", dest = 'output' )
   args = parser.parse_args ()
 
   args.output.write ("""+-{:-<32}-+-{:->40}-+-{:->32}-+-{:->15}-+\n""".format ("", "", "", ""))
   args.output.write ("""| {:<32} | {:>40} | {:>32} | {:>15} |\n""".format (*header ()))
   args.output.write ("""+-{:-<32}-+-{:->40}-+-{:->32}-+-{:->15}-+\n""".format ("", "", "", ""))
 
-  for current_domain in args.domain:
+  for current_domain in args.domains[0].split (','):
     for l in run (domain = current_domain, adapter = args.adapter):
       args.output.write ("""| {:<32} | {:>40} | {:>32} | {:>15} |\n""".format (*l))
     args.output.write ("""+-{:-<32}-+-{:->40}-+-{:->32}-+-{:->15}-+\n""".format ("", "", "", ""))
