@@ -5,6 +5,7 @@ import requests
 from itertools import product
 import re
 import sys
+import dns.resolver
 
 class ParameterException (Exception):
   pass
@@ -76,6 +77,16 @@ class NsLookup (object):
 
   def _none_fetch (self, domain):
     return 'N/A'
+
+  def _dns_fetch (self, domain):
+    for query_type in [ 'A', 'AAAA']:
+      try:
+        temp = dns.resolver.query (domain, query_type)
+        if len (temp):
+          return str (temp[0])
+      except (dns.resolver.NoNameservers, dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
+        pass
+    return None
 
   def fetch (self, domain):
     try:

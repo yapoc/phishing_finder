@@ -43,7 +43,7 @@ optional arguments:
   * `--adapter` correspond à l'adapteur utilisé pour obtenir les informations de déclaration DNS. Trois valeurs sont possibles à ce jour; seules deux sont développées : 
     * `web` interroge le résultat du site `http://dnslookup.fr`. C'est l'adapteur par défaut.
     * `none` ne retourne aucune information de déclaration DNS.
-    * `dns`, à développer, réalisera les requêtes DNS (`UDP:53`).
+    * `dns`, réalise les requêtes DNS par le biais de la lib `dnspython`.
 ```
 ./predict_punny_code_dns_names.py --domain domaine1.tld domaine2.tld --adapter none
 ```
