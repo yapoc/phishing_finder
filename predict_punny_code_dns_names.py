@@ -7,9 +7,10 @@ from libs.exceptions import ParameterException
 from libs.string.punny import derivate_domains
 from libs.string.misc import extract_domain_tld
 from libs.network.nslookup import lookup
+from libs.network.whois import whois
 
-def header ():
-  return [ 'Domaine', 'Encodage PunnyCode', 'Encodage UTF-8', 'Réservé?' ]
+SEP_LINE = """+-{:-<25}-+-{:->40}-+-{:->25}-+-{:->8}-+-{:->15}-+\n""".format ("", "", "", "", "")
+HEADERS = [ 'Domaine', 'Encodage PunnyCode', 'Encodage UTF-8', 'Réservé?' , '@IPv4?' ]
 
 def run (**kwargs):
   if 'domain' not in kwargs or 'adapter' not in kwargs:
@@ -18,11 +19,17 @@ def run (**kwargs):
     (domain, tld) = extract_domain_tld (kwargs['domain'])
     for punny_domain in derivate_domains (domain):
       punny = "{}.{}".format (punny_domain[1], tld)
+
+      punny_reserved = "Non"
+      if whois (punny, nb_max_try = 3):
+        punny_reserved = "Oui"
+
+      punny_ip = lookup (punny, kwargs['adapter'])
+      if not punny_ip:
+        punny_ip = 'N/A'
+
       utf8 = "{}.{}".format (punny_domain[0], tld)
-      punny_status = lookup (punny, kwargs['adapter'])
-      if not punny_status:
-        punny_status = 'dispo à l\'achat'
-      yield [ kwargs['domain'], punny, utf8, punny_status ]
+      yield [ kwargs['domain'], punny, utf8, punny_reserved, punny_ip ]
   except ParameterException as e:
     print (e)
 
@@ -38,11 +45,11 @@ if __name__ == "__main__":
     default = sys.stdout, help = "Emplacement du rapport.", dest = 'output' )
   args = parser.parse_args ()
 
-  args.output.write ("""+-{:-<32}-+-{:->40}-+-{:->32}-+-{:->15}-+\n""".format ("", "", "", ""))
-  args.output.write ("""| {:<32} | {:>40} | {:>32} | {:>15} |\n""".format (*header ()))
-  args.output.write ("""+-{:-<32}-+-{:->40}-+-{:->32}-+-{:->15}-+\n""".format ("", "", "", ""))
+  args.output.write (SEP_LINE)
+  args.output.write ("""| {:<25} | {:>40} | {:>25} | {:>8} | {:>15} |\n""".format (*HEADERS))
+  args.output.write (SEP_LINE)
 
   for current_domain in args.domain:
     for l in run (domain = current_domain, adapter = args.adapter):
-      args.output.write ("""| {:<32} | {:>40} | {:>32} | {:>15} |\n""".format (*l))
-    args.output.write ("""+-{:-<32}-+-{:->40}-+-{:->32}-+-{:->15}-+\n""".format ("", "", "", ""))
+      args.output.write ("""| {:<25} | {:>40} | {:>25} | {:>8} | {:>15} |\n""".format (*l))
+    args.output.write (SEP_LINE)

@@ -7,6 +7,12 @@ source <NOM_ENVIRONNEMENT_VIRTUEL>/bin/activate
 git clone https://github.com/yapoc/phishing_finder.git
 cd phishing_finder
 pip install -r requirements
+cd /tmp
+git clone https://github.com/yapoc/python-whois.git
+cd python-whois
+python setup.py build
+python setup.py install
+rm -rf /tmp/python-whois
 ```
 
 # Utilisation des scripts
@@ -60,19 +66,21 @@ optional arguments:
 
 ### Exemple de résultat
 ```
-(NOM_ENVIRONNEMENT_VIRTUEL) [user@host phishing_finder]$ ./predict_punny_code_dns_names.py -d example.com -a dns
-
-+----------------------------------+------------------------------------------+----------------------------------+-----------------+
-| Domaine                          |                       Encodage PunnyCode |                   Encodage UTF-8 |        Réservé? |
-+----------------------------------+------------------------------------------+----------------------------------+-----------------+
-| example.com                      |                              example.com |                      example.com |   93.184.216.34 |
-| example.com                      |                       xn--exampl-uva.com |                      examplë.com | dispo à l'achat |
-| example.com                      |                       xn--exampl-8ua.com |                      examplè.com | dispo à l'achat |
-|                                                           8<...>8                                                                |
-| example.com                      |                      xn--exarnpl-hya.com |                     exarnplé.com | dispo à l'achat |
-| example.com                      |                       xn--exmple-cua.com |                      exämple.com |   85.13.149.201 |
-| example.com                      |                      xn--exmpl-hra6c.com |                      exämplë.com | dispo à l'achat |
-| example.com                      |                      xn--exmpl-hra5a.com |                      exämplè.com | dispo à l'achat |
-|                                                           8<...>8                                                                |
-+----------------------------------+------------------------------------------+----------------------------------+-----------------+
+(NOM_ENVIRONNEMENT_VIRTUEL) [user@host phishing_finder]$ ./predict_punny_code_dns_names.py -d example.com
++---------------------------+------------------------------------------+---------------------------+----------+-----------------+
+| Domaine                   |                       Encodage PunnyCode |            Encodage UTF-8 | Réservé? |          @IPv4? |
++---------------------------+------------------------------------------+---------------------------+----------+-----------------+
+| example.com               |                              example.com |               example.com |      Oui |   93.184.216.34 |
+| example.com               |                       xn--exampl-uva.com |               examplë.com |      Non |             N/A |
+| example.com               |                       xn--exampl-8ua.com |               examplè.com |      Non |             N/A |
+| example.com               |                       xn--exampl-gva.com |               examplé.com |      Non |             N/A |
+| example.com               |                             exarnple.com |              exarnple.com |      Oui |             N/A |
+| example.com               |                      xn--exarnpl-xya.com |              exarnplë.com |      Non |             N/A |
+| example.com               |                      xn--exarnpl-8xa.com |              exarnplè.com |      Non |             N/A |
+| example.com               |                      xn--exarnpl-hya.com |              exarnplé.com |      Non |             N/A |
+| example.com               |                       xn--exmple-cua.com |               exämple.com |      Oui |   85.13.149.201 |
+| example.com               |                      xn--exmpl-hra6c.com |               exämplë.com |      Non |             N/A |
+| example.com               |                      xn--exmpl-hra5a.com |               exämplè.com |      Non |             N/A |
+|                                                              8<...>8                                                          |
++---------------------------+------------------------------------------+---------------------------+----------+-----------------+
 ```
