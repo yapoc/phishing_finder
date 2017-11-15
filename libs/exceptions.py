@@ -2,4 +2,7 @@
 class ParameterException (Exception):
   pass
 
+class WrongDomainException (Exception):
+  pass
+
 
