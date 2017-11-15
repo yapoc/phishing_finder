@@ -44,9 +44,9 @@ optional arguments:
 ```
 
   * `--adapter` ou `-a` correspond à l'adapteur utilisé pour obtenir les informations de déclaration DNS. Trois valeurs sont possibles à ce jour; seules deux sont développées : 
-    * `web` interroge le résultat du site `http://dnslookup.fr`. C'est l'adapteur par défaut.
+    * `dns`, réalise les requêtes DNS par le biais de la lib `dnspython`. **C'est l'adapteur par défaut**.
     * `none` ne retourne aucune information de déclaration DNS.
-    * `dns`, réalise les requêtes DNS par le biais de la lib `dnspython`.
+    * `web` interroge le résultat du site `http://dnslookup.fr`.
 ```
 ./predict_punny_code_dns_names.py -d example.com -a none
 ./predict_punny_code_dns_names.py -d example.com --adapter none

@@ -119,7 +119,7 @@ if __name__ == "__main__":
     help = 'Adresse du domaine à surveiller (Option duplicable 1 fois par domaine).',\
     dest = 'domain', action = 'append')
   parser.add_argument('-a', '--adapter', type = str, required = False, \
-    help = 'Adapteur à utiliser pour réaliser la résolution DNS.', default = 'WEB', \
+    help = 'Adapteur à utiliser pour réaliser la résolution DNS.', default = 'dns', \
     dest = 'adapter')
   parser.add_argument ('-o', '--output', type = argparse.FileType ('w'), \
     default = sys.stdout, help = "Emplacement du rapport.", dest = 'output' )
