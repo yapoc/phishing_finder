@@ -4,7 +4,8 @@ import argparse
 import sys
 
 from libs.exceptions import ParameterException
-from libs.string.punny import PunnyGenerator
+from libs.string.punny import derivate_domains
+from libs.string.misc import extract_domain_tld
 from libs.network.nslookup import NsLookup
 
 def header ():
@@ -15,12 +16,14 @@ def run (**kwargs):
     raise Exception ("La fonction n'est pas appellée correctement.")
   try:
     ns = NsLookup (kwargs['adapter'])
-    punny = PunnyGenerator (kwargs['domain'])
-    for punny_domain in punny.generate_domains ():
-      punny_status = ns.fetch ("{}".format (punny_domain[1]))
+    (domain, tld) = extract_domain_tld (kwargs['domain'])
+    for punny_domain in derivate_domains (domain):
+      punny = "{}.{}".format (punny_domain[1], tld)
+      utf8 = "{}.{}".format (punny_domain[0], tld)
+      punny_status = ns.fetch (punny)
       if not punny_status:
         punny_status = 'dispo à l\'achat'
-      yield [ kwargs['domain'], punny_domain[1], punny_domain[0], punny_status ]
+      yield [ kwargs['domain'], punny, utf8, punny_status ]
   except ParameterException as e:
     print (e)
 
