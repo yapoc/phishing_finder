@@ -3,8 +3,16 @@
 from whois import query, WhoisException
 import time
 import socket
+import signal
 import logging
 logger = logging.getLogger (__name__)
+
+"""https://stackoverflow.com/questions/492519/timeout-on-a-function-call"""
+def _time_out_handler (signum, frame):
+  raise Exception ("Timeout!")
+
+signal.signal (signal.SIGALRM, _time_out_handler)
+signal.alarm (10)
 
 def whois (domain, nb_done = 0, nb_max_try = 5, sleep_time = 1):
   while nb_done < nb_max_try:
