@@ -29,9 +29,13 @@ def run (**kwargs):
       logger.info ("Analyse du domaine {} ({}).".format (*d))
       is_reserved = "Non"
       has_ip = 'N/A'
-      if estimate_domain_is_registered (domain = d[0], whois_server = d[1]):
-        is_reserved = "Oui"
-        has_ip = lookup (d[0], kwargs['adapter']) or 'N/A'
+      try:
+        if estimate_domain_is_registered (domain = d[0], whois_server = d[1]):
+          is_reserved = "Oui"
+          has_ip = lookup (d[0], kwargs['adapter']) or 'N/A'
+      except Exception as e:
+        logger.warn ("Une erreur s'est produite.")
+        logger.warn (e)
       yield [ d[0], is_reserved, has_ip ]
   except ParameterException as e:
     logger.critical (e)
