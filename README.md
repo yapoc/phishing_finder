@@ -24,12 +24,12 @@ source <NOM_ENVIRONNEMENT_VIRTUEL>/bin/activate
 cd phishing_finder
 ```
 
-## Script `predict_punny_code_dns_names.py`
+## Script `110_check_for_name_on_punnycode_replacement.py`
 ### Lancement
 Plusieurs paramètres peuvent être utilisés conjointement pour réaliser les opérations souhaitées : 
   * `--help` est le paramètre principal correspondant à la documentation du script : 
 ```
-usage: predict_punny_code_dns_names.py [-h] -d DOMAIN [-a ADAPTER] [-o OUTPUT]
+usage: 110_check_for_name_on_punnycode_replacement.py [-h] -d DOMAIN [-a ADAPTER] [-o OUTPUT]
 Génération de tout plein de noms de domaines potentiels pour surveiller le
 phishing.
 optional arguments:
@@ -45,8 +45,8 @@ optional arguments:
 
   * `--domain` ou `-d` correspond au domaine à interroger. Exemple d'utilisation : 
 ```
-./predict_punny_code_dns_names.py --domain example1.com -d example2.com
-./predict_punny_code_dns_names.py -d example1.com -d example2.com
+./110_check_for_name_on_punnycode_replacement.py --domain example1.com -d example2.com
+./110_check_for_name_on_punnycode_replacement.py -d example1.com -d example2.com
 ```
 
   * `--adapter` ou `-a` correspond à l'adapteur utilisé pour obtenir les informations de déclaration DNS. Trois valeurs sont possibles à ce jour; seules deux sont développées : 
@@ -54,19 +54,19 @@ optional arguments:
     * `none` ne retourne aucune information de déclaration DNS.
     * `web` interroge le résultat du site `http://dnslookup.fr`.
 ```
-./predict_punny_code_dns_names.py -d example.com -a none
-./predict_punny_code_dns_names.py -d example.com --adapter none
+./110_check_for_name_on_punnycode_replacement.py -d example.com -a none
+./110_check_for_name_on_punnycode_replacement.py -d example.com --adapter none
 ```
 
   * `--output` ou `-o` permet d'indiquer l'emplacement du fichier contenant les résultats. `/dev/stdout` par défaut.
 ```
-./predict_punny_code_dns_names.py -d example.com -a none --output /tmp/fichier_de_resultat
-./predict_punny_code_dns_names.py -d example.com -a none -o /tmp/fichier_de_resultat
+./110_check_for_name_on_punnycode_replacement.py -d example.com -a none --output /tmp/fichier_de_resultat
+./110_check_for_name_on_punnycode_replacement.py -d example.com -a none -o /tmp/fichier_de_resultat
 ```
 
 ### Exemple de résultat
 ```
-(NOM_ENVIRONNEMENT_VIRTUEL) [user@host phishing_finder]$ ./predict_punny_code_dns_names.py -d example.com
+(NOM_ENVIRONNEMENT_VIRTUEL) [user@host phishing_finder]$ ./110_check_for_name_on_punnycode_replacement.py -d example.com
 +---------------------------+------------------------------------------+---------------------------+----------+-----------------+
 | Domaine                   |                       Encodage PunnyCode |            Encodage UTF-8 | Réservé? |          @IPv4? |
 +---------------------------+------------------------------------------+---------------------------+----------+-----------------+
@@ -85,12 +85,12 @@ optional arguments:
 +---------------------------+------------------------------------------+---------------------------+----------+-----------------+
 ```
 
-## Script `create_tld_whois_server_cache_file.py`
+## Script `000_create_cache.py`
 ### Lancement
 Ce script est destiné à générer le fichier de cache contenant les associations entre un `tld` et le serveur de `whois` associé. Plusieurs paramètres peuvent être utilisés conjointement pour réaliser les opérations souhaitées : 
   * `--help` est le paramètre principal correspondant à la documentation du script : 
 ```
-usage: create_tld_whois_server_cache_file.py [-h] [-c CACHE]
+usage: 000_create_cache.py [-h] [-c CACHE]
 
 Génération du fichier de cache contenant les associations entre les tld et les
 serveurs de whois.
@@ -124,12 +124,12 @@ Un fichier `cache` a été créé dans un format proche de celui-ci :
 }
 ```
 
-## Script `do_lookup_for_all_tlds.py`
+## Script `100_check_for_name_on_each_tld.py`
 ### Lancement
 Plusieurs paramètres peuvent être utilisés conjointement pour réaliser les opérations souhaitées : 
   * `--help` est le paramètre principal correspondant à la documentation du script : 
 ```
-usage: do_lookup_for_all_tlds.py [-h] -n NAME [-a ADAPTER] [-o OUTPUT]
+usage: 100_check_for_name_on_each_tld.py [-h] -n NAME [-a ADAPTER] [-o OUTPUT]
                                  [--no-cache] [--cache-file CACHE_FILE]
 
 Génération de tout plein de noms de domaines potentiels pour surveiller le
@@ -154,5 +154,5 @@ optional arguments:
     * `web` interroge le résultat du site `http://dnslookup.fr`.
   * `--output` ou `-o` permet d'indiquer l'emplacement du fichier contenant les résultats. `/dev/stdout` par défaut.
   * `--no-cache` est un drapeau permettant d'indiquer au programme de ne pas utiliser son cache mais de récupérer toutes les informations depuis la page web IANA. Positionné à `True` par défaut => **Par défaut on requête plein de fois IANA!!!**
-  * `--cache-file` correspond au fichier contenant le cache. Généré par le script `create_tld_whois_server_cache_file.py`.
+  * `--cache-file` correspond au fichier contenant le cache. Généré par le script `000_create_cache.py`.
 
