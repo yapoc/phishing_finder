@@ -123,3 +123,36 @@ Un fichier `cache` a été créé dans un format proche de celui-ci :
   ], 
 }
 ```
+
+## Script `do_lookup_for_all_tlds.py`
+### Lancement
+Plusieurs paramètres peuvent être utilisés conjointement pour réaliser les opérations souhaitées : 
+  * `--help` est le paramètre principal correspondant à la documentation du script : 
+```
+usage: do_lookup_for_all_tlds.py [-h] -n NAME [-a ADAPTER] [-o OUTPUT]
+                                 [--no-cache] [--cache-file CACHE_FILE]
+
+Génération de tout plein de noms de domaines potentiels pour surveiller le
+phishing.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n NAME, --name NAME  Nom à surveiller (Option duplicable 1 fois par nom).
+  -a ADAPTER, --adapter ADAPTER
+                        Adapteur à utiliser pour réaliser la résolution DNS.
+  -o OUTPUT, --output OUTPUT
+                        Emplacement du rapport.
+  --no-cache            Activer ce booléen pour ne pas utiliser le dossier de
+                        cache.
+  --cache-file CACHE_FILE
+                        Fichier de cache.
+```
+  * `--name` ou `-n` permet d'indiquer la marque pour laquelle on veut tester tous les TLDs obtenus dans la liste IANA. L'option peut se répéter pour surveiller plusieurs marques.
+  * `--adapter` ou `-a` correspond à l'adapteur utilisé pour obtenir les informations de déclaration DNS. Trois valeurs sont possibles à ce jour; seules deux sont développées : 
+    * `dns`, réalise les requêtes DNS par le biais de la lib `dnspython`. **C'est l'adapteur par défaut**.
+    * `none` ne retourne aucune information de déclaration DNS.
+    * `web` interroge le résultat du site `http://dnslookup.fr`.
+  * `--output` ou `-o` permet d'indiquer l'emplacement du fichier contenant les résultats. `/dev/stdout` par défaut.
+  * `--no-cache` est un drapeau permettant d'indiquer au programme de ne pas utiliser son cache mais de récupérer toutes les informations depuis la page web IANA. Positionné à `True` par défaut => **Par défaut on requête plein de fois IANA!!!**
+  * `--cache-file` correspond au fichier contenant le cache. Généré par le script `create_tld_whois_server_cache_file.py`.
+
