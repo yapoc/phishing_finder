@@ -6,9 +6,9 @@ import logging
 import json
 logging.basicConfig (
   format = "[%(asctime)s] - %(levelname)-8s - %(name)-15s - %(message)s",
-  level = logging.DEBUG,
+  level = logging.INFO,
 )
-from libs.string.tld import fetch_n_parse_tlds
+from libs.string.tld import create_cache_data
 logger = logging.getLogger (__name__)
 
 if __name__ == "__main__":
@@ -19,10 +19,5 @@ if __name__ == "__main__":
   args = parser.parse_args ()
   logger.debug ("Arguments utilisés par le script : {}.".format (args))
 
-  result = {}
-  for asso in fetch_n_parse_tlds ():
-    if asso[1] not in result:
-      result[asso[1]] = []
-    result[asso[1]].append (asso[0])
+  result = create_cache_data ()
   args.cache.write (json.dumps (result))
-
