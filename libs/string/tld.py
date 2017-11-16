@@ -48,6 +48,6 @@ def compute_all_domains_tld (element, no_cache = False, cache_file = 'cache/tld_
       for ns in temp:
         for tld in temp[ns]:
           yield ( "{}.{}".format (element, tld), ns )
-  except:
+  except FileNotFoundError:
     logger.error ("Impossible d'ouvrir le fichier de cache {}; récupération des informations depuis IANA.".format (cache_file))
     return _compute_from_iana (element)
