@@ -2,6 +2,11 @@
 # vi: set foldmethod=indent: set tabstop=2: set shiftwidth=2:
 import argparse
 import sys
+import logging
+logging.basicConfig (
+  format = "[%(asctime)s] - %(levelname)-8s - %(name)-15s - %(message)s",
+  level = logging.INFO,
+)
 
 from libs.exceptions import ParameterException
 from libs.string.punny import derivate_domains
@@ -11,6 +16,8 @@ from libs.network.whois import whois
 
 SEP_LINE = """+-{:-<25}-+-{:->40}-+-{:->25}-+-{:->8}-+-{:->15}-+\n""".format ("", "", "", "", "")
 HEADERS = [ 'Domaine', 'Encodage PunnyCode', 'Encodage UTF-8', 'Réservé?' , '@IPv4?' ]
+
+logger = logging.getLogger (__name__)
 
 def run (**kwargs):
   if 'domain' not in kwargs or 'adapter' not in kwargs:
@@ -31,9 +38,10 @@ def run (**kwargs):
       utf8 = "{}.{}".format (punny_domain[0], tld)
       yield [ kwargs['domain'], punny, utf8, punny_reserved, punny_ip ]
   except ParameterException as e:
-    print (e)
+    logger.critical (e)
 
 if __name__ == "__main__":
+
   parser = argparse.ArgumentParser(description='Génération de tout plein de noms de domaines potentiels pour surveiller le phishing.')
   parser.add_argument('-d', '--domain', type = str, required = True, \
     help = 'Adresse du domaine à surveiller (Option duplicable 1 fois par domaine).',\
@@ -45,11 +53,16 @@ if __name__ == "__main__":
     default = sys.stdout, help = "Emplacement du rapport.", dest = 'output' )
   args = parser.parse_args ()
 
+  logger.debug ("Arguments utilisés par le script : {}.".format (args))
+
   args.output.write (SEP_LINE)
   args.output.write ("""| {:<25} | {:>40} | {:>25} | {:>8} | {:>15} |\n""".format (*HEADERS))
   args.output.write (SEP_LINE)
 
-  for current_domain in args.domain:
-    for l in run (domain = current_domain, adapter = args.adapter):
-      args.output.write ("""| {:<25} | {:>40} | {:>25} | {:>8} | {:>15} |\n""".format (*l))
-    args.output.write (SEP_LINE)
+  try:
+    for current_domain in args.domain:
+      for l in run (domain = current_domain, adapter = args.adapter):
+        args.output.write ("""| {:<25} | {:>40} | {:>25} | {:>8} | {:>15} |\n""".format (*l))
+      args.output.write (SEP_LINE)
+  except Exception as e:
+    logger.critical ("Erreur catastrophique : {}".format (e))

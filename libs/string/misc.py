@@ -1,5 +1,7 @@
 # vi: set foldmethod=indent: set tabstop=2: set shiftwidth=2:
 from libs.exceptions import WrongDomainException
+import logging
+logger = logging.getLogger (__name__)
 
 def extract_domain_tld (element):
   temp = element.split ('.')

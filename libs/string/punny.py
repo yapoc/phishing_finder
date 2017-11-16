@@ -1,5 +1,10 @@
 # vi: set foldmethod=indent: set tabstop=2: set shiftwidth=2:
 from itertools import product
+from libs.string.misc import extract_domain_tld
+from libs.exceptions import WrongDomainException
+import logging
+logger = logging.getLogger (__name__)
+
 _REPLACEMENTS = {
   'a': ['ä', 'à', 'á'],
   'e': ['ë', 'è', 'é'],
@@ -15,10 +20,10 @@ _REPLACEMENTS = {
 }
 
 def _domain_from_element (element):
-  temp = element.split ('.')
-  if len (temp) > 2:
-    raise ParameterException ("Merci de n'indiquer que le domaine; sans les sous-domaines.")
-  return temp [0]
+  try:
+    return extract_domain_tld (element)[0]
+  except WrongDomainException: 
+    return element
 
 def _build_letters_tree (word):
   result = []
@@ -34,7 +39,9 @@ def _utf8_to_punny (word):
 
 def derivate_domains (domain):
   domain = _domain_from_element (domain)
+  logger.info ("Tentative d'identification des domaines dérivés de {}".format (domain))
   possibilities = _build_letters_tree (domain)
+  logger.debug ("Produits cartésiens qu'il va falloir se fader.".format (possibilities))
   for temp in product (*possibilities):
     current = "".join (temp)
     yield ("{}".format (current), "{}".format (_utf8_to_punny (current)))
