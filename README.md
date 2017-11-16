@@ -29,17 +29,16 @@ cd phishing_finder
 Ce script est destiné à générer le fichier de cache contenant les associations entre un `tld` et le serveur de `whois` associé. Plusieurs paramètres peuvent être utilisés conjointement pour réaliser les opérations souhaitées : 
   * `--help` est le paramètre principal correspondant à la documentation du script : 
 ```
-usage: 000_create_cache.py [-h] [-c CACHE]
+usage: 000_create_cache.py [-h] [--cache-tld-whois CACHE_TLD_WHOIS]
 
-Génération du fichier de cache contenant les associations entre les tld et les
-serveurs de whois.
+Génération des différents fichiers de cache utilisés par les scripts.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -c CACHE, --cache CACHE
+  --cache-tld-whois CACHE_TLD_WHOIS
                         Emplacement du fichier de cache
 ```
-  * `--cache` ou `-c` : ce paramètre indique l'emplacement du fichier de cache à utiliser. La valeur par défaut est `cache/tld_whois.py`.
+  * `--cache-tld-whois` : ce paramètre indique l'emplacement du fichier de cache à utiliser. La valeur par défaut est `cache/tld_whois.py`.
 
 ### Exemple de résultat
 Un fichier `cache` a été créé dans un format proche de celui-ci : 

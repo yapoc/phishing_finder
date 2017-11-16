@@ -15,11 +15,11 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser(description='Génération des différents fichiers de cache utilisés par les scripts.')
   parser.add_argument('--cache-tld-whois', type = argparse.FileType ('w'), \
     help = 'Emplacement du fichier de cache',\
-    dest = 'cache_tld_whois', required = False)
+    dest = 'cache_tld_whois', required = False, default = 'cache/tld_whois.py' )
   args = parser.parse_args ()
   logger.debug ("Arguments utilisés par le script : {}.".format (args))
 
   if args.cache_tld_whois:
       logging.info ("Rafraîchissement du cache pour les associations tld <=> serveur de whois.")
       result = tld_whois_cache_data ()
-      args.cache_tld_whois.write (json.dumps (result, sort_keys = True, indent = 2))
+    args.cache_tld_whois.write (json.dumps (result, sort_keys = True, indent = 2))
