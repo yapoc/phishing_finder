@@ -84,3 +84,42 @@ optional arguments:
 |                                                              8<...>8                                                          |
 +---------------------------+------------------------------------------+---------------------------+----------+-----------------+
 ```
+
+## Script `create_tld_whois_server_cache_file.py`
+### Lancement
+Ce script est destiné à générer le fichier de cache contenant les associations entre un `tld` et le serveur de `whois` associé. Plusieurs paramètres peuvent être utilisés conjointement pour réaliser les opérations souhaitées : 
+  * `--help` est le paramètre principal correspondant à la documentation du script : 
+```
+usage: create_tld_whois_server_cache_file.py [-h] [-c CACHE]
+
+Génération du fichier de cache contenant les associations entre les tld et les
+serveurs de whois.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CACHE, --cache CACHE
+                        Emplacement du fichier de cache
+```
+  * `--cache` ou `-c` : ce paramètre indique l'emplacement du fichier de cache à utiliser. La valeur par défaut est `cache/tld_whois.py`.
+
+### Exemple de résultat
+Un fichier `cache` a été créé dans un format proche de celui-ci : 
+```
+{
+  "whois.afilias-srs.net": [
+    "abarth", 
+    "abbott", 
+    "abbvie", 
+    "aco", 
+    "active"
+  ], 
+  "whois.donuts.co": [
+    "academy", 
+    "accountants"
+  ], 
+  8<...>8,
+  "whois.unitedtld.com": [
+    "actor"
+  ], 
+}
+```

@@ -20,4 +20,4 @@ if __name__ == "__main__":
   logger.debug ("Arguments utilisés par le script : {}.".format (args))
 
   result = create_cache_data ()
-  args.cache.write (json.dumps (result))
+  args.cache.write (json.dumps (result, sort_keys = True, indent = 2))
