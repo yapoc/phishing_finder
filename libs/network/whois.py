@@ -28,23 +28,23 @@ def _raw_whois (domain, whois_server = None):
     whois_server = '{}.whois-servers.net'.format (domain.split ('.')[-1])
 
   logger.info ("Utilisation du serveur {} pour whois sur domaine {}.".format (whois_server, domain))
+  response = []
 
   try:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(((whois_server, 43)))
     s.send(("%s\r\n" % domain).encode())
+    while 1:
+      t = s.recv(4096)
+      response.append(t)
+      if t == b'': break
+
+    s.close()
   except Exception as e:
     logger.error ("Problème lors du contact de {}".format (whois_server))
     logger.error (e)
     return ""
 
-  response = []
-  while 1:
-    t = s.recv(4096)
-    response.append(t)
-    if t == b'': break
-
-  s.close()
   return b''.join(response).decode()
 
 def estimate_domain_is_registered (domain, whois_server = None):
