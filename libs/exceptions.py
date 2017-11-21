@@ -5,4 +5,6 @@ class ParameterException (Exception):
 class WrongDomainException (Exception):
   pass
 
+class TimeoutException (Exception):
+  pass
 

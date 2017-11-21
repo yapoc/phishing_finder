@@ -5,14 +5,14 @@ import time
 import socket
 import signal
 import logging
+from libs.exceptions import TimeoutException
 logger = logging.getLogger (__name__)
 
 """https://stackoverflow.com/questions/492519/timeout-on-a-function-call"""
 def _time_out_handler (signum, frame):
-  raise Exception ("Timeout!")
+  raise TimeoutException ("Timeout!")
 
 signal.signal (signal.SIGALRM, _time_out_handler)
-signal.alarm (10)
 
 def whois (domain, nb_done = 0, nb_max_try = 5, sleep_time = 1):
   while nb_done < nb_max_try:
@@ -38,6 +38,7 @@ def _raw_whois (domain, whois_server = None):
   logger.info ("Utilisation du serveur {} pour whois sur domaine {}.".format (whois_server, domain))
   response = []
 
+  signal.alarm (10)
   try:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(((whois_server, 43)))
@@ -48,6 +49,9 @@ def _raw_whois (domain, whois_server = None):
       if t == b'': break
 
     s.close()
+  except TimeoutException as e:
+    logger.error ("Timeout lors de l'interrogation de {}".format (whois_server))
+    return ""
   except Exception as e:
     logger.error ("Problème lors du contact de {}".format (whois_server))
     logger.error (e)
